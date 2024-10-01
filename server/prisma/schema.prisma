@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// Types and Enums
+enum Type {
+  numbers
+  text
+}
+
+type Choice {
+  choice String
+  type   Type
+}
+
+// Models
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  username  String
+  email     String
+  password  String
+  createdAt DateTime @default(now())
+
+  quizzes Quiz[]
+}
+
+model Quiz {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+
+  questions Question[]
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+}
+
+model Question {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  statement      String
+  choices        Choice[]
+  correct_choice Choice
+
+  quiz   Quiz   @relation(fields: [quizId], references: [id])
+  quizId String @db.ObjectId
+}
