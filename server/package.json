@@ -1,0 +1,38 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "MERN server for quiz app",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "start:dev": "tsx watch src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gurupranav-tech/MERN_QuizApp.git"
+  },
+  "author": "Guru Pranav",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Gurupranav-tech/MERN_QuizApp/issues"
+  },
+  "homepage": "https://github.com/Gurupranav-tech/MERN_QuizApp#readme",
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.7",
+    "@types/express": "^5.0.0",
+    "@types/http-errors": "^2.0.4",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.7.4",
+    "nodemon": "^3.1.7",
+    "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "http-errors": "^2.0.0",
+    "morgan": "^1.10.0",
+    "tsx": "^4.19.1",
+    "winston": "^3.14.2"
+  }
+}
