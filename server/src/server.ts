@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import expressSession from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
+import passport from "passport";
 import httpLogger from "./middlewares/httpLogger";
 import AuthRouter from "./routes/auth";
 import { NODE_ENV, PORT, SESSION_SECRET } from "./config";
@@ -10,11 +11,13 @@ import Logger from "./utils/logger";
 
 // Connect to mongodb database
 try {
+  Logger.info("Attempting to connect to mongodb");
   await connectToMongoDB();
-} catch {
-  Logger.error("Error connecting to database");
+} catch (err) {
+  Logger.error("Error connecting to mongodb\n" + err);
   process.exit(1);
 }
+Logger.info("Connected to mongodb");
 
 // Create a storage class for express session
 const sessionStore = new PrismaSessionStore(prisma as any, {
@@ -40,6 +43,8 @@ app.use(
     secret: SESSION_SECRET,
   })
 );
+app.use(passport.initialize());
+app.use(passport.session());
 
 if (NODE_ENV === "development") {
   app.use(httpLogger);
@@ -49,4 +54,4 @@ if (NODE_ENV === "development") {
 app.use("/auth", AuthRouter);
 
 // Start the server
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.listen(PORT, () => Logger.info(`Server started on port ${PORT}`));

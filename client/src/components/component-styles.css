@@ -1,0 +1,17 @@
+.form-label-default {
+    @apply absolute left-4 top-2/4 text-gray-500 select-none cursor-text;
+    transform: translateY(-50%);
+}
+
+.form-input-default {
+    @apply outline-none text-text-color border-2 border-text-color text-lg w-full rounded-xl py-2 px-4 block;
+}
+
+.form-label-focus {
+    @apply absolute left-4 top-0 text-primary-color bg-white px-1 text-center select-none cursor-text;
+    transform: translateY(-50%);
+}
+
+.form-input-focus {
+    @apply outline-none text-text-color border-2 border-primary-color text-lg w-full rounded-xl py-2 px-4 block;
+}
