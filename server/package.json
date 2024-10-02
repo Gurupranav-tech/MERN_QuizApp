@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Gurupranav-tech/MERN_QuizApp#readme",
   "devDependencies": {
     "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/express-session": "^1.18.0",
     "@types/http-errors": "^2.0.4",
@@ -33,15 +34,18 @@
   "dependencies": {
     "@prisma/client": "5.20.0",
     "@quixo3/prisma-session-store": "^3.1.13",
-    "argon": "^2.0.21",
+    "argon2": "^0.41.1",
+    "bson": "^6.8.0",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "express-session": "^1.18.0",
-    "http-errors": "^2.0.0",
     "morgan": "^1.10.0",
     "passport": "^0.7.0",
     "tsx": "^4.19.1",
-    "winston": "^3.14.2"
+    "winston": "^3.14.2",
+    "zod": "^3.23.8",
+    "zod-validation-error": "^3.4.0"
   }
 }

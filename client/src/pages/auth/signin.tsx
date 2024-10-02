@@ -1,11 +1,34 @@
-import { FormEvent } from "react";
-import FormInput from "../../components/FormInput";
+import { FormEvent, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import FormInput from "../../components/FormInput";
+import Requests from "../../lib/Requests";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function SignInPage() {
-  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+  const [formState, setFormState] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleChange = (key: string) => (e: string) =>
+    setFormState((s) => ({ ...s, [key]: e }));
+
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      await Requests.POST("/auth/signin", formState, {});
+      toast.success(`Created an account successfully. Please log in.`, {
+        duration: 5000,
+      });
+      navigate("/auth/login");
+    } catch (err: any) {
+      setError(err.response.data.error);
+    }
   };
 
   return (
@@ -13,10 +36,29 @@ export default function SignInPage() {
       <h1 className="text-center text-text-color text-3xl font-bold border-b-2 border-text-color pb-2">
         Sign In
       </h1>
-      <form onSubmit={handleLogin} className="mt-6 grid gap-4">
-        <FormInput name="Username" type="text" required />
-        <FormInput name="Email" type="email" required />
-        <FormInput name="Password" type="password" required />
+      <p className="mt-2 text-red-500 break-words">{error}</p>
+      <form onSubmit={handleLogin} className="mt-4 grid gap-4">
+        <FormInput
+          value={formState.username}
+          onChange={handleChange("username")}
+          name="Username"
+          type="text"
+          required
+        />
+        <FormInput
+          value={formState.email}
+          onChange={handleChange("email")}
+          name="Email"
+          type="email"
+          required
+        />
+        <FormInput
+          value={formState.password}
+          onChange={handleChange("password")}
+          name="Password"
+          type="password"
+          required
+        />
         <motion.button
           className="bg-primary-color text-white rounded-xl py-2 text-lg font-bold"
           type="submit"

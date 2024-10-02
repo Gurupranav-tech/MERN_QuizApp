@@ -1,6 +1,7 @@
 import { lazy, StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import AuthLayout from "./pages/auth/layout";
 import "./index.css";
 import Loader from "./components/Loader";
@@ -22,5 +23,6 @@ createRoot(document.getElementById("root")!).render(
         </Routes>
       </Router>
     </Suspense>
+    <Toaster position="bottom-right" />
   </StrictMode>
 );

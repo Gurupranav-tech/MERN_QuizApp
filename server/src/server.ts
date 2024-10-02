@@ -3,6 +3,8 @@ import cookieParser from "cookie-parser";
 import expressSession from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import passport from "passport";
+import { UUID } from "bson";
+import cors from "cors";
 import httpLogger from "./middlewares/httpLogger";
 import AuthRouter from "./routes/auth";
 import { NODE_ENV, PORT, SESSION_SECRET } from "./config";
@@ -41,6 +43,9 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
     secret: SESSION_SECRET,
+    genid() {
+      return new UUID().toBinary() as any;
+    },
   })
 );
 app.use(passport.initialize());
@@ -48,6 +53,11 @@ app.use(passport.session());
 
 if (NODE_ENV === "development") {
   app.use(httpLogger);
+  app.use(
+    cors({
+      origin: ["http://localhost:5173"],
+    })
+  );
 }
 
 // Add all the routes
