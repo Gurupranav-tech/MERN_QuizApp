@@ -1,14 +1,10 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import expressSession from "express-session";
-import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import passport from "passport";
-import { UUID } from "bson";
 import cors from "cors";
 import httpLogger from "./middlewares/httpLogger";
 import AuthRouter from "./routes/auth";
-import { NODE_ENV, PORT, SESSION_SECRET } from "./config";
-import prisma, { connect as connectToMongoDB } from "./db/connect";
+import { NODE_ENV, PORT } from "./config";
+import { connect as connectToMongoDB } from "./db/connect";
 import Logger from "./utils/logger";
 
 // Connect to mongodb database
@@ -21,12 +17,6 @@ try {
 }
 Logger.info("Connected to mongodb");
 
-// Create a storage class for express session
-const sessionStore = new PrismaSessionStore(prisma as any, {
-  dbRecordIdIsSessionId: true,
-  dbRecordIdFunction: undefined,
-});
-
 // Create the server using express
 const app = express();
 
@@ -34,22 +24,6 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  expressSession({
-    store: sessionStore,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    },
-    secret: SESSION_SECRET,
-    genid() {
-      return new UUID().toBinary() as any;
-    },
-  })
-);
-app.use(passport.initialize());
-app.use(passport.session());
 
 if (NODE_ENV === "development") {
   app.use(httpLogger);
@@ -61,7 +35,7 @@ if (NODE_ENV === "development") {
 }
 
 // Add all the routes
-app.use("/auth", AuthRouter);
+app.use("/api/auth", AuthRouter);
 
 // Start the server
 app.listen(PORT, () => Logger.info(`Server started on port ${PORT}`));

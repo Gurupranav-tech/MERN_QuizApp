@@ -12,6 +12,7 @@ export default function LoginPage() {
 
   const handleChange = (key: string) => (e: string) =>
     setFormState((s) => ({ ...s, [key]: e }));
+
   const handleLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };

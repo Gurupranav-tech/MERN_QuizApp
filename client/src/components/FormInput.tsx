@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./component-styles.css";
 
 type Props = {
@@ -18,10 +18,6 @@ export default function FormInput({
 }: Props) {
   const [focus, setFocus] = useState(false);
 
-  useEffect(() => {
-    if (value) setFocus(true);
-  }, [value, focus]);
-
   return (
     <div className="relative">
       <label
@@ -38,7 +34,7 @@ export default function FormInput({
         id={name}
         required={required}
         onFocus={() => setFocus(true)}
-        onBlur={() => setFocus(false)}
+        onBlur={() => setFocus(false || value !== "")}
         autoFocus={focus}
         value={value}
         onChange={(e) => onChange(e.target.value)}

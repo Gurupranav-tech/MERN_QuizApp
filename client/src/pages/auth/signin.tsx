@@ -1,4 +1,4 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import FormInput from "../../components/FormInput";
