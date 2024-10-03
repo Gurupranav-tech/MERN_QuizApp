@@ -82,4 +82,13 @@ router.post("/signin", async (req, res): Promise<any> => {
   return res.status(200).json({ data: "success" });
 });
 
+router.get("/logout", (_, res) => {
+  res
+    .clearCookie("auth:id", {
+      httpOnly: true,
+      secure: NODE_ENV !== "development",
+    })
+    .json({ data: "Ok" });
+});
+
 export default router;

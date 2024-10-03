@@ -3,6 +3,7 @@ import FormInput from "../../components/FormInput";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const [formState, setFormState] = useState({
@@ -19,6 +20,7 @@ export default function LoginPage() {
     e.preventDefault();
 
     if (await login(formState.email, formState.password)) {
+      toast.success(`Logged in with ${formState.email}`);
       navigate("/");
     }
   };

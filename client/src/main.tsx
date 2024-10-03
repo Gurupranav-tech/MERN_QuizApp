@@ -6,23 +6,29 @@ import AuthLayout from "./pages/auth/layout";
 import "./index.css";
 import Loader from "./components/Loader";
 import AuthProvider from "./contexts/AuthContext";
+import Header from "./components/Header";
 
 const LoginPage = lazy(() => import("./pages/auth/login"));
 const HomePage = lazy(() => import("./pages/home"));
 const SignInPage = lazy(() => import("./pages/auth/signin"));
 
-createRoot(document.getElementById("root")!).render(
+const root = createRoot(document.getElementById("root")!);
+
+root.render(
   <StrictMode>
     <AuthProvider>
       <Suspense fallback={<Loader />}>
         <Router>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/auth/" element={<AuthLayout />}>
-              <Route path="login" element={<LoginPage />} />
-              <Route path="signin" element={<SignInPage />} />
-            </Route>
-          </Routes>
+          <Header />
+          <div className="container px-4 md:px-0 md:w-4/5 md:mx-auto flex items-center justify-between mt-4">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/auth/" element={<AuthLayout />}>
+                <Route path="login" element={<LoginPage />} />
+                <Route path="signin" element={<SignInPage />} />
+              </Route>
+            </Routes>
+          </div>
         </Router>
       </Suspense>
     </AuthProvider>
