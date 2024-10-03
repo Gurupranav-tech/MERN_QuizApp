@@ -1,20 +1,26 @@
 import { FormEvent, useState } from "react";
 import FormInput from "../../components/FormInput";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function LoginPage() {
   const [formState, setFormState] = useState({
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
+  const { error, login } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (key: string) => (e: string) =>
     setFormState((s) => ({ ...s, [key]: e }));
 
-  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (await login(formState.email, formState.password)) {
+      navigate("/");
+    }
   };
 
   return (
