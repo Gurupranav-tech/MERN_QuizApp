@@ -1,24 +1,26 @@
 import { useLayoutEffect, useMemo, useState } from "react";
-import { Choice, Question, Type } from "../lib/definitions";
-import { motion } from "framer-motion";
+import { Choice, Type } from "../lib/definitions";
 import Card, { CardBody, CardHeader } from "../components/Card";
 import FormInput from "../components/FormInput";
 import Button from "../components/Button";
 import toast from "react-hot-toast";
 import { MdDelete } from "react-icons/md";
 import useScreenType from "../lib/useScreenType";
-
-type OnlyQuestion = Omit<Question, "id" | "quiz">;
+import Requests from "../lib/Requests";
+import { OnlyQuestion, QuestionsViewer } from "../components/QuestionViewer";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateQuiz() {
   const [questions, setQuestions] = useState<OnlyQuestion[]>([]);
   const [selectedNumber, setSelectedNumber] = useState<number>(
     questions.length + 1
   );
+  const [title, setTitle] = useState("");
   const selectedQuestion = useMemo(() => {
     if (selectedNumber - 1 >= questions.length) return undefined;
     return questions[selectedNumber - 1];
   }, [selectedNumber]);
+  const navigate = useNavigate();
 
   const addQuestion = (question: OnlyQuestion, idx?: number) => {
     if (idx && idx - 1 < questions.length) {
@@ -43,8 +45,38 @@ export default function CreateQuiz() {
     setSelectedNumber(idx + 1);
   };
 
+  const handleCreateQuiz = async () => {
+    if (title === "" || questions.length === 0)
+      return toast.error("Quiz must have a title and atleast one question");
+    try {
+      const res = await Requests.POST(
+        "/quiz/create-quiz",
+        {
+          title,
+          questions,
+        },
+        {}
+      );
+      const params = new URLSearchParams();
+      params.set("url_slug", res.data.data.url_slug);
+
+      const url = `/create-quiz/success?${params.toString()}`;
+
+      navigate(url);
+    } catch (error: any) {
+      toast.error(error.response.data.error);
+    }
+  };
+
   return (
     <section className="mt-2 grid gap-10">
+      <input
+        type="text"
+        placeholder="Title"
+        className="outline-none px-4 py-2 rounded-lg text-center font-bold text-xl drop-shadow-md"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
       <QuestionsViewer
         changeQuestionNumber={handleChangeQuestionNumber}
         questions={questions}
@@ -57,6 +89,9 @@ export default function CreateQuiz() {
           deleteQuestion={deleteQuestion}
         />
       </div>
+      <Button type="secondary" animated onClick={handleCreateQuiz}>
+        Create Quiz
+      </Button>
     </section>
   );
 }
@@ -237,50 +272,5 @@ function QuestionCreator({
         </div>
       </CardBody>
     </Card>
-  );
-}
-
-type QProps = {
-  questions: OnlyQuestion[];
-  changeQuestionNumber: (idx: number) => void;
-};
-
-function QuestionsViewer({ questions, changeQuestionNumber }: QProps) {
-  return (
-    <section className="grid questions-grid">
-      {questions.map((_, idx) => (
-        <Square key={idx} onClick={() => changeQuestionNumber(idx)}>
-          {idx + 1}
-        </Square>
-      ))}
-      <Square onClick={() => changeQuestionNumber(questions.length)} last>
-        {questions.length + 1}
-      </Square>
-    </section>
-  );
-}
-
-function Square({
-  children,
-  last = false,
-  onClick,
-}: {
-  children: React.ReactNode;
-  last?: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <motion.div
-      className={`${
-        !last
-          ? "bg-white text-text-color"
-          : "border-2 border-white bg-transparent text-white"
-      } cursor-pointer text-xl rounded-lg w-8 h-8 grid place-items-center`}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
-      onClick={onClick}
-    >
-      {children}
-    </motion.div>
   );
 }

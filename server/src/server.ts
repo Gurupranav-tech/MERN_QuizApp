@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import httpLogger from "./middlewares/httpLogger";
 import AuthRouter from "./routes/auth";
+import QuizRouter from "./routes/quiz";
 import { NODE_ENV, PORT } from "./config";
 import { connect as connectToMongoDB } from "./db/connect";
 import Logger from "./utils/logger";
@@ -37,6 +38,7 @@ if (NODE_ENV === "development") {
 
 // Add all the routes
 app.use("/api/auth", AuthRouter);
+app.use("/api/quiz", QuizRouter);
 
 // Start the server
 app.listen(PORT, () => Logger.info(`Server started on port ${PORT}`));

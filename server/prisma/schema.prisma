@@ -14,14 +14,10 @@ datasource db {
 }
 
 // Types and Enums
-enum Type {
-  numbers
-  text
-}
 
 type Choice {
   choice String
-  type   Type
+  type   Int
 }
 
 // Models
@@ -34,6 +30,8 @@ model User {
   createdAt DateTime @default(now())
 
   quizzes Quiz[]
+
+  quizRecords QuizRecord[]
 }
 
 model Quiz {
@@ -44,6 +42,8 @@ model Quiz {
 
   user   User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
+
+  quizRecords QuizRecord[]
 }
 
 model Question {
@@ -62,4 +62,14 @@ model Session {
   sid       String   @unique
   data      String
   expiresAt DateTime
+}
+
+model QuizRecord {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+
+  quiz   Quiz   @relation(fields: [quizId], references: [id])
+  quizId String @db.ObjectId
 }
