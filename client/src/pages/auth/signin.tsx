@@ -1,10 +1,10 @@
 import { FormEvent, useState } from "react";
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import FormInput from "../../components/FormInput";
 import Requests from "../../lib/Requests";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import Button from "../../components/Button";
 
 export default function SignInPage() {
   const [formState, setFormState] = useState({
@@ -59,14 +59,9 @@ export default function SignInPage() {
           type="password"
           required
         />
-        <motion.button
-          className="bg-primary-color text-white rounded-xl py-2 text-lg font-bold"
-          type="submit"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
+        <Button type="primary" buttonType="submit" animated>
           Sign In
-        </motion.button>
+        </Button>
       </form>
       <div className="mt-4 flex items-center gap-1">
         <span className="flex-1 bg-text-color block h-[2px]"></span>

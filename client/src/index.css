@@ -13,3 +13,12 @@ select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
 }
+
+*, *::after, *::before {
+  border-color: black;
+}
+
+.questions-grid {
+  grid-template-columns: repeat(auto-fill, 32px);
+  gap: 1rem;
+}

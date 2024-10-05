@@ -6,6 +6,8 @@ type Props = {
   type: string;
   required?: boolean;
   value: string;
+  asTextArea?: boolean;
+  className?: string;
   onChange: (val: string) => void;
 };
 
@@ -14,12 +16,14 @@ export default function FormInput({
   type,
   required = false,
   value,
+  asTextArea = false,
+  className = "",
   onChange,
 }: Props) {
   const [focus, setFocus] = useState(false);
 
   return (
-    <div className="relative">
+    <div className={`relative ${className}`}>
       <label
         htmlFor={name}
         className={`transition-all ease-in ${
@@ -28,17 +32,32 @@ export default function FormInput({
       >
         {name}
       </label>
-      <input
-        className={`${!focus ? "form-input-default" : "form-input-focus"}`}
-        type={type}
-        id={name}
-        required={required}
-        onFocus={() => setFocus(true)}
-        onBlur={() => setFocus(false || value !== "")}
-        autoFocus={focus}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
+      {!asTextArea ? (
+        <input
+          className={`${!focus ? "form-input-default" : "form-input-focus"}`}
+          type={type}
+          id={name}
+          required={required}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false || value !== "")}
+          autoFocus={focus}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      ) : (
+        <textarea
+          className={`${
+            !focus ? "form-input-default" : "form-input-focus"
+          } min-h-14 overflow-y-auto h-auto`}
+          id={name}
+          required={required}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false || value !== "")}
+          autoFocus={focus}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      )}
     </div>
   );
 }

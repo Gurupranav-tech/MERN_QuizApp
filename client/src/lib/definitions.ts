@@ -12,13 +12,13 @@ export type Quiz = {
   questions: Question[];
 };
 
-enum Type {
+export enum Type {
   numbers,
   text,
 }
 
 export type Choice = {
-  choice: String;
+  choice: string;
   type: Type;
 };
 

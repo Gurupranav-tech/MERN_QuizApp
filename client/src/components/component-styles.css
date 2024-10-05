@@ -15,3 +15,27 @@
 .form-input-focus {
     @apply outline-none text-text-color border-2 border-primary-color text-lg w-full rounded-xl py-2 px-4 block;
 }
+
+.header-user-profile-big {
+    @apply *:transition-all flex items-center gap-6 text-text-color font-bold text-lg *:cursor-pointer;
+}
+
+.header-user-profile-small {
+    @apply hidden z-50;
+}
+
+.header-user-profile-open {
+    @apply absolute top-0 left-0 w-screen h-screen bg-white grid place-items-center text-3xl *:border-b-2 border-black *:w-full text-center *:h-full *:flex *:items-center *:justify-center *:gap-1;
+    @apply border-black;
+
+}
+
+.card {
+    @apply grid grid-flow-row gap-5;
+}
+
+@media (min-width: 640px) {
+    .card {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}

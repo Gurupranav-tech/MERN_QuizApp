@@ -1,6 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { useAuth } from "../contexts/AuthContext";
+import { useState } from "react";
+import "./component-styles.css";
+import useScreenType from "../lib/useScreenType";
 
 export default function Header() {
   const { user, loading } = useAuth();
@@ -31,28 +35,79 @@ function AuthButtons() {
 function UserProfile() {
   const pathname = useLocation();
   const { logout } = useAuth();
+  const screenType = useScreenType();
+  const [open, setOpen] = useState(false);
 
-  const classes = "bg-white px-5 py-1 rounded-full";
+  const classes =
+    screenType === "desktop" ? "bg-white px-5 py-1 rounded-full" : "";
+
+  const handleClose = () => setOpen(false);
 
   return (
-    <ul className="*:transition-all flex items-center gap-6 text-text-color font-bold text-lg *:cursor-pointer">
-      <li className={`${pathname.pathname === "/" ? classes : ""}`}>
-        <Link to="/">Home</Link>
-      </li>
-      <li className={`${pathname.pathname === "/profile" ? classes : ""}`}>
-        <Link to="/profile">Profile</Link>
-      </li>
-      <li className={`${pathname.pathname === "/create-quiz" ? classes : ""}`}>
-        <Link to="/create-quiz">Create Quiz</Link>
-      </li>
-      <li>
-        <p
-          onClick={() => logout().then(() => toast.success("Logged out!"))}
-          className="select-none"
+    <>
+      <GiHamburgerMenu
+        className={`text-text-color ${
+          screenType === "mobile" ? "block" : "hidden"
+        }`}
+        onClick={() => setOpen(true)}
+      />
+      <ul
+        className={`${
+          screenType === "desktop"
+            ? "header-user-profile-big"
+            : "header-user-profile-small"
+        } transition-all ${
+          screenType === "mobile" && open ? "header-user-profile-open" : ""
+        }`}
+      >
+        <li
+          onClick={handleClose}
+          className={`${pathname.pathname === "/" ? classes : ""}`}
         >
-          Logout
-        </p>
-      </li>
-    </ul>
+          <Link to="/">Home</Link>
+        </li>
+        <li
+          onClick={handleClose}
+          className={`${
+            pathname.pathname.startsWith("/profile") ? classes : ""
+          }`}
+        >
+          <Link to="/profile">Profile</Link>
+        </li>
+        <li
+          onClick={handleClose}
+          className={`${
+            pathname.pathname.startsWith("/create-quiz") ? classes : ""
+          }`}
+        >
+          <Link to="/create-quiz">Create Quiz</Link>
+        </li>
+        <li onClick={handleClose}>
+          <p
+            onClick={() => logout().then(() => toast.success("Logged out!"))}
+            className="select-none"
+          >
+            Logout
+          </p>
+        </li>
+        {screenType === "mobile" && (
+          <li onClick={handleClose}>
+            <svg
+              stroke="currentColor"
+              fill="currentColor"
+              strokeWidth="0"
+              viewBox="0 0 512 512"
+              className="text-3xl"
+              width="3rem"
+              height="3rem"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M401.4 224h-214l83-79.4c11.9-12.5 11.9-32.7 0-45.2s-31.2-12.5-43.2 0L89 233.4c-6 5.8-9 13.7-9 22.4v.4c0 8.7 3 16.6 9 22.4l138.1 134c12 12.5 31.3 12.5 43.2 0 11.9-12.5 11.9-32.7 0-45.2l-83-79.4h214c16.9 0 30.6-14.3 30.6-32 .1-18-13.6-32-30.5-32z"></path>
+            </svg>
+            Back
+          </li>
+        )}
+      </ul>
+    </>
   );
 }

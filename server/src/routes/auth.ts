@@ -48,9 +48,10 @@ router.post("/login", async (req, res): Promise<any> => {
       return res.status(401).json({ error: "Invalid email id or password" });
 
     user.password = "";
+    console.log(NODE_ENV !== "development");
     res
       .cookie("auth:id", user.id, {
-        secure: NODE_ENV !== "deveopment",
+        secure: NODE_ENV !== "development",
         httpOnly: true,
       })
       .status(200)

@@ -8,6 +8,7 @@ export default {
         "primary-color-light": "#EDDD4A",
         "secondary-color": "#9A6CF0",
         "text-color": "#444746",
+        "text-color-darker": "##464947",
       },
     },
   },
