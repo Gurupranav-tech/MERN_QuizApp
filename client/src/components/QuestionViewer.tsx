@@ -31,9 +31,14 @@ export function Square({
 type QProps = {
   questions: OnlyQuestion[];
   changeQuestionNumber: (idx: number) => void;
+  viewer?: boolean;
 };
 
-export function QuestionsViewer({ questions, changeQuestionNumber }: QProps) {
+export function QuestionsViewer({
+  questions,
+  changeQuestionNumber,
+  viewer = false,
+}: QProps) {
   return (
     <section className="grid questions-grid">
       {questions.map((_, idx) => (
@@ -41,9 +46,11 @@ export function QuestionsViewer({ questions, changeQuestionNumber }: QProps) {
           {idx + 1}
         </Square>
       ))}
-      <Square onClick={() => changeQuestionNumber(questions.length)} last>
-        {questions.length + 1}
-      </Square>
+      {!viewer && (
+        <Square onClick={() => changeQuestionNumber(questions.length)} last>
+          {questions.length + 1}
+        </Square>
+      )}
     </section>
   );
 }

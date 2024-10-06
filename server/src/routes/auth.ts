@@ -92,4 +92,33 @@ router.get("/logout", (_, res) => {
     .json({ data: "Ok" });
 });
 
+const UpdateSchema = z.object({
+  username: z.string().optional(),
+  email: z.string().optional(),
+});
+
+router.post("/update", async (req, res): Promise<any> => {
+  const auth = req.cookies["auth:id"];
+  if (!auth) return res.status(401).json({ error: "User not logged in." });
+
+  const { success, error, data } = UpdateSchema.safeParse(req.body);
+  if (!success)
+    return res.status(400).json({ error: fromError(error).toString() });
+
+  try {
+    const newuser = await prisma.user.update({
+      where: {
+        id: auth,
+      },
+      data,
+    });
+
+    newuser.password = "";
+    res.cookie("auth:id", newuser.id);
+    return res.status(200).json({ data: newuser });
+  } catch (error) {
+    return res.status(400).json({ error: "Not authenticated!" });
+  }
+});
+
 export default router;

@@ -62,7 +62,14 @@ function UserProfile() {
       >
         <li
           onClick={handleClose}
-          className={`${pathname.pathname === "/" ? classes : ""}`}
+          className={`${
+            !(
+              pathname.pathname.startsWith("/profile") ||
+              pathname.pathname.startsWith("/create-quiz")
+            )
+              ? classes
+              : ""
+          }`}
         >
           <Link to="/">Home</Link>
         </li>

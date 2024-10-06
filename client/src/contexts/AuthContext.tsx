@@ -8,6 +8,7 @@ type ContextType = {
   loading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<boolean>;
+  refresh: () => void;
 };
 
 type Props = {
@@ -22,12 +23,7 @@ export default function AuthProvider({ children }: Props) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    Requests.GET("/auth/me", {})
-      .then((d) => d.data)
-      .then((d) => setUser(d))
-      .catch(() => null)
-      .finally(() => setLoading(false));
+    refresh();
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -77,6 +73,15 @@ export default function AuthProvider({ children }: Props) {
     }
   };
 
+  const refresh = () => {
+    setLoading(true);
+    Requests.GET("/auth/me", {})
+      .then((d) => d.data)
+      .then((d) => setUser(d.data))
+      .catch(() => null)
+      .finally(() => setLoading(false));
+  };
+
   const values: ContextType = {
     user,
     error,
@@ -84,6 +89,7 @@ export default function AuthProvider({ children }: Props) {
 
     login,
     logout,
+    refresh,
   };
 
   return <context.Provider value={values}>{children}</context.Provider>;

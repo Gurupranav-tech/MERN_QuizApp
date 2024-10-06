@@ -20,6 +20,11 @@ const QuizSchema = z.object({
   questions: z.array(QuestionSchema),
 });
 
+const TakeQuizSchema = z.object({
+  quiz_id: z.string(),
+  score: z.number(),
+});
+
 const router = express.Router();
 
 router.post("/create-quiz", authUser, async (req, res): Promise<any> => {
@@ -47,6 +52,48 @@ router.post("/create-quiz", authUser, async (req, res): Promise<any> => {
     res
       .status(500)
       .json({ error: "Internal server error " + error.toString() });
+  }
+});
+
+router.post("/quiz-taken", authUser, async (req, res): Promise<any> => {
+  const user = req.user;
+  if (!user) return res.status(401).json({ error: "Not authenticated!" });
+
+  const { success, data, error } = TakeQuizSchema.safeParse(req.body);
+  if (!success)
+    return res.status(400).json({ error: fromError(error).toString() });
+
+  const record = await prisma.quizRecord.create({
+    data: {
+      score: data.score,
+      quizId: data.quiz_id,
+      userId: user.id,
+    },
+  });
+
+  res.status(200).json({ data: { ...record } });
+});
+
+router.get("/:id", authUser, async (req, res): Promise<any> => {
+  console.log(req.body);
+  const id = req.params.id;
+
+  if (!req.user) return res.status(401).json({ error: "Not authenticated!" });
+
+  try {
+    const quiz = await prisma.quiz.findFirstOrThrow({
+      where: {
+        id,
+        userId: req.user.id,
+      },
+      include: {
+        questions: true,
+      },
+    });
+
+    res.status(200).json({ data: quiz });
+  } catch (error) {
+    res.status(400).json({ error: error.toString() });
   }
 });
 

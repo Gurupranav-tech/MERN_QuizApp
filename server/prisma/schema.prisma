@@ -72,4 +72,6 @@ model QuizRecord {
 
   quiz   Quiz   @relation(fields: [quizId], references: [id])
   quizId String @db.ObjectId
+
+  score Int
 }

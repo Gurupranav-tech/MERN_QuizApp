@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./component-styles.css";
 
 type Props = {
@@ -20,7 +20,14 @@ export default function FormInput({
   className = "",
   onChange,
 }: Props) {
-  const [focus, setFocus] = useState(false);
+  const [focus, setFocus] = useState(() => {
+    if (value) return true;
+    return false;
+  });
+
+  useEffect(() => {
+    if (value) setFocus(true);
+  }, [value]);
 
   return (
     <div className={`relative ${className}`}>

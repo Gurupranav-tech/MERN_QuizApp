@@ -2,6 +2,8 @@ import { FaArrowRight } from "react-icons/fa";
 import Card, { CardBody, CardHeader } from "../components/Card";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function HomePage() {
   return (
@@ -59,6 +61,15 @@ function CardsSection() {
 }
 
 function HeroSection() {
+  const [code, setCode] = useState("");
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (code === "")
+      return toast.error("Enter a valid quiz code to take the quiz");
+    navigate(`/${code}`);
+  };
+
   return (
     <section className="w-full ">
       <h1 className="text-center text-[64px] text-text-color-darker font-bold">
@@ -72,8 +83,10 @@ function HeroSection() {
           type="text"
           placeholder="Enter code"
           className="max-w-80 px-4 py-2 rounded-xl w-full outline-none drop-shadow-md"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
         />
-        <Button type="secondary" animated>
+        <Button type="secondary" animated onClick={handleClick}>
           Start <FaArrowRight />
         </Button>
       </div>

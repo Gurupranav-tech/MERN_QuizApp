@@ -7,13 +7,17 @@ import "./index.css";
 import Loader from "./components/Loader";
 import AuthProvider from "./contexts/AuthContext";
 import Header from "./components/Header";
-import TakeQuiz from "./pages/take-quiz";
 
 const LoginPage = lazy(() => import("./pages/auth/login"));
 const HomePage = lazy(() => import("./pages/home"));
 const SignInPage = lazy(() => import("./pages/auth/signin"));
 const CreateQuiz = lazy(() => import("./pages/create-quiz"));
 const QuizSuccess = lazy(() => import("./pages/quiz-success"));
+const TakeQuiz = lazy(() => import("./pages/take-quiz"));
+const Profile = lazy(() => import("./pages/profile"));
+const QuizTaken = lazy(() => import("./pages/quiz-taken"));
+const ProfileHistory = lazy(() => import("./pages/profile-history"));
+const ProfileStat = lazy(() => import("./pages/profile-stat"));
 
 const root = createRoot(document.getElementById("root")!);
 
@@ -26,6 +30,10 @@ root.render(
           <div className="container px-4 md:px-0 md:w-4/5 md:mx-auto flex justify-center items-between flex-col mt-4 gap-14">
             <Routes>
               <Route path="/" element={<HomePage />} />
+              <Route path="/quiz-taken" element={<QuizTaken />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile/history" element={<ProfileHistory />} />
+              <Route path="/profile/stat" element={<ProfileStat />} />
               <Route path="/:id" element={<TakeQuiz />} />
               <Route path="/auth/" element={<AuthLayout />}>
                 <Route path="login" element={<LoginPage />} />

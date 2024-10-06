@@ -7,6 +7,7 @@ type Props = {
   animated?: boolean;
   buttonType?: "button" | "submit" | "reset";
   className?: string;
+  disabled?: boolean;
 };
 
 export default function Button({
@@ -16,6 +17,7 @@ export default function Button({
   animated = false,
   buttonType = "button",
   className = "",
+  disabled = false,
 }: Props) {
   const animationProps = animated
     ? {
@@ -47,6 +49,7 @@ export default function Button({
         classes + " flex items-center justify-evenly gap-3 px-4 " + className
       }
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </motion.button>
